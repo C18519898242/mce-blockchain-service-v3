@@ -1,4 +1,18 @@
-## MODIFIED Requirements
+# project Specification
+
+## Purpose
+TBD - created by archiving change update-dev-environment-specs. Update Purpose after archive.
+## Requirements
+### Requirement: Project Conventions
+项目 SHALL 遵循标准化的开发约定和最佳实践。
+
+#### Scenario: 代码风格
+- **WHEN** 开发者编写代码
+- **THEN** 代码 SHALL 遵循kebab-case文件名、camelCase变量名、PascalCase类名约定
+
+#### Scenario: 架构模式
+- **WHEN** 设计系统架构
+- **THEN** 系统 SHALL 使用DDD分层、适配器模式和依赖注入
 
 ### Requirement: Git Workflow
 项目 SHALL 使用标准化的Git工作流程，支持团队协作和变更管理。
@@ -29,3 +43,4 @@
 #### Scenario: 环境一致性
 - **WHEN** 在不同操作系统下开发
 - **THEN** 项目 SHALL 确保命令和脚本在PowerShell和bash环境下均可运行
+
