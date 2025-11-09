@@ -8,7 +8,7 @@
 - 配置TypeScript编译环境
 - 配置简单的Jest测试框架（跳过ESLint/Prettier）
 - 实现核心类型定义（Transaction、ChainType、IBlockchainAdapter）
-- 添加Node.js RESTful框架（Express）和依赖注入相关类库配置
+- 添加Node.js RESTful框架（Express + NestJS）和依赖注入相关类库配置
 
 ## Impact
 - Affected specs: project（新增基础架构要求）

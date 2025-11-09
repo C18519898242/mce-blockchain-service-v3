@@ -29,7 +29,7 @@
 - **AND** 系统 SHALL 提供IBlockchainAdapter接口
 
 ### Requirement: RESTful Framework and Dependency Injection
-项目 SHALL 配置Express RESTful框架和依赖注入容器。
+项目 SHALL 配置Express + NestJS RESTful框架和依赖注入容器。
 
 #### Scenario: Express应用配置
 - **WHEN** 开发者需要启动HTTP服务
@@ -37,6 +37,13 @@
 - **AND** 系统 SHALL 支持路由注册和中间件配置
 - **AND** 系统 SHALL 提供统一的错误处理机制
 - **AND** 系统 SHALL 在端口9001上监听请求
+
+#### Scenario: NestJS应用配置
+- **WHEN** 开发者需要企业级HTTP服务
+- **THEN** 系统 SHALL 提供NestJS应用基础结构
+- **AND** 系统 SHALL 支持模块化架构
+- **AND** 系统 SHALL 提供内置依赖注入
+- **AND** 系统 SHALL 支持装饰器模式
 
 #### Scenario: Index路由实现
 - **WHEN** 用户访问/index端点
