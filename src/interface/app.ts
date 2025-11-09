@@ -4,6 +4,8 @@
 
 import express from 'express';
 import { errorMiddleware } from './middleware/error.middleware';
+import { requestLoggingMiddleware } from './middleware/request-logging.middleware';
+import { logger } from '../infrastructure/logging/logger';
 
 export class App {
   public app: express.Application;
@@ -16,6 +18,9 @@ export class App {
   }
 
   private initializeMiddlewares(): void {
+    // Request logging middleware (must be first)
+    this.app.use(requestLoggingMiddleware);
+    
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     
@@ -25,7 +30,11 @@ export class App {
 
   public listen(): void {
     this.app.listen(this.port, () => {
-      console.log(`Server running on port ${this.port}`);
+      logger.info(`Server started successfully`, {
+        port: this.port,
+        environment: process.env.NODE_ENV || 'development',
+        service: 'mce-blockchain-service-v3'
+      });
     });
   }
 }
