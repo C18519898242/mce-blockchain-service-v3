@@ -1,19 +1,19 @@
 ## 1. 项目目录结构创建
-- [ ] 1.1 创建DDD分层目录结构（domain/application/infrastructure/interface）
-- [ ] 1.2 创建domain子目录（transaction/wallet/shared）
-- [ ] 1.3 创建infrastructure子目录（api/persistence/messaging）
-- [ ] 1.4 创建interface子目录（routes/dto/middleware）
-- [ ] 1.5 创建config目录
+- [x] 1.1 创建DDD分层目录结构（domain/application/infrastructure/interface）
+- [x] 1.2 创建domain子目录（transaction/wallet/shared）
+- [x] 1.3 创建infrastructure子目录（api/persistence/messaging）
+- [x] 1.4 创建interface子目录（routes/dto/middleware）
+- [x] 1.5 创建config目录
 
 ## 2. TypeScript配置
-- [ ] 2.1 创建tsconfig.json配置文件
-- [ ] 2.2 配置编译选项和路径映射
-- [ ] 2.3 测试TypeScript编译功能
+- [x] 2.1 创建tsconfig.json配置文件
+- [x] 2.2 配置编译选项和路径映射
+- [x] 2.3 测试TypeScript编译功能
 
 ## 3. Jest测试配置
-- [ ] 3.1 创建简单的jest.config.js
-- [ ] 3.2 配置基础测试环境
-- [ ] 3.3 验证Jest可以正常运行
+- [x] 3.1 创建简单的jest.config.js
+- [x] 3.2 配置基础测试环境
+- [x] 3.3 验证Jest可以正常运行
 
 ## 4. 核心类型定义
 - [ ] 4.1 创建domain/transaction/Transaction.ts
