@@ -41,6 +41,11 @@ Provide standardized transaction format and APIs (build/scan/broadcast), focusin
 - **变更管理**: 使用 OpenSpec 三阶段工作流 (Propose → Implement → Archive)
 - **变更ID**: kebab-case, 短描述性，动词前缀 (add-, update-, remove-, refactor-)
 
+### Development Environment
+- **Shell兼容性**: PowerShell 使用分号 `;` 替代 `&&` 连接命令
+- **跨平台**: 确保命令在 Windows (PowerShell) 和 Unix (bash) 环境下均可运行
+- **文档示例**: 在文档中使用分号语法确保Windows兼容性
+
 ## Domain Context
 - **多链统一**: 相同接口支持不同区块链特性，隐藏链间差异
 - **只读服务**: 不处理私钥，专注查询和构建交易，确保安全边界
