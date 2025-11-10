@@ -6,12 +6,12 @@
 - [x] 1.5 验证Redis连接和基本操作
 
 ## 2. 核心数据模型实现
-- [ ] 2.1 创建Coin实体类（domain/coin/Coin.ts）
-- [ ] 2.2 创建AddressBalance实体类（domain/balance/AddressBalance.ts）
-- [ ] 2.3 实现AddressDomainService（domain/address/AddressService.ts）
-- [ ] 2.4 添加公钥到地址转换算法
-- [ ] 2.5 添加地址格式验证逻辑
-- [ ] 2.6 创建相关单元测试
+- [x] 2.1 创建Coin实体类（domain/coin/Coin.ts）
+- [x] 2.2 创建AddressBalance实体类（domain/balance/AddressBalance.ts）
+- [x] 2.3 实现AddressDomainService（domain/address/AddressService.ts）
+- [x] 2.4 添加公钥到地址转换算法
+- [x] 2.5 添加地址格式验证逻辑
+- [x] 2.6 创建相关单元测试
 
 ## 3. Redis仓储层实现
 - [ ] 3.1 创建Redis仓储接口（infrastructure/persistence/redis.repository.ts）
