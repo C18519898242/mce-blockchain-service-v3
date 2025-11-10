@@ -14,16 +14,18 @@
 - [x] 2.6 创建相关单元测试
 
 ## 3. Redis仓储层实现
-- [ ] 3.1 创建Redis仓储接口（infrastructure/persistence/redis.repository.ts）
-- [ ] 3.2 实现Coin的Redis操作
-- [ ] 3.3 实现AddressBalance的Redis操作
-- [ ] 3.4 实现地址映射的Redis操作
-- [ ] 3.5 添加Redis操作的事务支持
-- [ ] 3.6 创建Redis仓储的单元测试
+- [ ] 3.1 创建Domain层Repository接口（domain/coin/interfaces/ICoinRepository.ts）
+- [ ] 3.2 创建Domain层Repository接口（domain/balance/interfaces/IBalanceRepository.ts）- 仅查询方法，不包含保存
+- [ ] 3.3 创建Domain层Repository接口（domain/address/interfaces/IAddressRepository.ts）
+- [ ] 3.4 实现Infrastructure层CoinRepository（infrastructure/persistence/redis/CoinRepository.ts）
+- [ ] 3.5 实现Infrastructure层BalanceRepository（infrastructure/blockchain/BalanceRepository.ts）- 从区块链实时获取余额
+- [ ] 3.6 实现Infrastructure层AddressRepository（infrastructure/persistence/redis/AddressRepository.ts）
+- [ ] 3.7 添加Redis操作的事务支持（仅用于Coin和Address数据）
+- [ ] 3.8 创建Repository接口和实现的单元测试
 
 ## 4. 区块链适配器实现
-- [ ] 4.1 实现EthereumBlockchainAdapter（infrastructure/api/ethereum.adapter.ts）
-- [ ] 4.2 集成ethers.js SDK
+- [ ] 4.1 实现SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）
+- [ ] 4.2 集成@solana/web3.js SDK
 - [ ] 4.3 实现余额查询功能
 - [ ] 4.4 实现地址生成功能
 - [ ] 4.5 添加错误处理和重试机制

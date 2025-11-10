@@ -56,6 +56,17 @@
   - 只支持地址输入（被否决，不够灵活）
   - 链特定公钥格式（被否决，复杂度高）
 
+### Decision 5: Repository接口位置设计
+- **What**: Repository接口定义在Domain层，具体实现在Infrastructure层
+- **Why**:
+  - 符合DDD领域驱动设计原则，保持领域层纯净
+  - 领域层定义业务需要的抽象接口，不依赖具体技术
+  - 便于单元测试，可以轻松Mock Repository
+  - 支持多种存储实现的灵活切换
+- **Alternatives considered**:
+  - 接口和实现都在Infrastructure层（被否决，违反依赖倒置原则）
+  - 接口在Application层（被否决，Application层不应包含领域抽象）
+
 ## Risks / Trade-offs
 
 ### Risk 1: 多链维护复杂度
@@ -152,6 +163,97 @@ export class AddressDomainService {
 }
 ```
 
+### Repository Interfaces (Domain Layer)
+```typescript
+// src/domain/coin/interfaces/ICoinRepository.ts
+export interface ICoinRepository {
+  findByKey(coinKey: string): Promise<Coin | null>;
+  save(coin: Coin): Promise<void>;
+  findAll(): Promise<Coin[]>;
+  delete(coinKey: string): Promise<void>;
+  findByBlockchain(blockchain: string): Promise<Coin[]>;
+}
+
+// src/domain/balance/interfaces/IBalanceRepository.ts
+export interface IBalanceRepository {
+  findByAddressAndCoin(address: string, coinKey: string): Promise<AddressBalance | null>;
+  findBalancesByAddress(address: string): Promise<AddressBalance[]>;
+  findBalancesByCoin(coinKey: string): Promise<AddressBalance[]>;
+}
+
+// src/domain/address/interfaces/IAddressRepository.ts
+export interface IAddressRepository {
+  findByPublicKeyAndChain(publicKey: string, blockchain: string): Promise<string | null>;
+  saveAddressMapping(publicKey: string, blockchain: string, address: string): Promise<void>;
+  getAddressesByPublicKey(publicKey: string): Promise<Map<string, string>>;
+  deleteAddressMapping(publicKey: string, blockchain: string): Promise<void>;
+}
+```
+
+### Repository Implementations (Infrastructure Layer)
+```typescript
+// src/infrastructure/persistence/redis/CoinRepository.ts
+export class CoinRepository implements ICoinRepository {
+  constructor(private redisService: RedisService) {}
+  
+  async findByKey(coinKey: string): Promise<Coin | null> {
+    const data = await this.redisService.get(`coin:${coinKey}`);
+    return data ? JSON.parse(data) : null;
+  }
+  
+  async save(coin: Coin): Promise<void> {
+    await this.redisService.set(`coin:${coin.key}`, JSON.stringify(coin));
+  }
+  
+  // ... 其他实现
+}
+
+// src/infrastructure/blockchain/BalanceRepository.ts
+export class BalanceRepository implements IBalanceRepository {
+  constructor(
+    private blockchainAdapter: IBlockchainAdapter,
+    private coinRepository: ICoinRepository
+  ) {}
+  
+  async findByAddressAndCoin(address: string, coinKey: string): Promise<AddressBalance | null> {
+    // 从区块链实时获取余额数据
+    const coin = await this.coinRepository.findByKey(coinKey);
+    if (!coin) return null;
+    
+    const balance = await this.blockchainAdapter.getBalance(address, coin);
+    
+    return new AddressBalance(
+      address,
+      coinKey,
+      balance,
+      new Date().toISOString(),
+      await this.blockchainAdapter.getLatestBlockNumber()
+    );
+  }
+  
+  async findBalancesByAddress(address: string): Promise<AddressBalance[]> {
+    // 获取所有币种，然后批量查询余额
+    const coins = await this.coinRepository.findAll();
+    const balances: AddressBalance[] = [];
+    
+    for (const coin of coins) {
+      const balance = await this.findByAddressAndCoin(address, coin.key);
+      if (balance) {
+        balances.push(balance);
+      }
+    }
+    
+    return balances;
+  }
+  
+  async findBalancesByCoin(coinKey: string): Promise<AddressBalance[]> {
+    // 这个方法需要监控的地址列表，实际实现可能需要从其他地方获取
+    // 暂时返回空数组，具体实现根据业务需求调整
+    return [];
+  }
+}
+```
+
 ## API Design
 
 ### Address相关接口
@@ -170,9 +272,6 @@ export class AddressDomainService {
 ```
 # Coin定义
 coin:${coinKey} → Coin对象
-
-# 余额数据
-balance:${coinKey}:${address} → AddressBalance对象
 
 # 地址映射（公钥到地址）
 addresses:${publicKey}:${blockchain} → address
