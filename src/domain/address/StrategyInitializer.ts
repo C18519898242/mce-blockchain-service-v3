@@ -29,45 +29,6 @@ export class StrategyInitializer {
     addressStrategyRegistry.registerWithValidation(solanaStrategy);
   }
 
-  /**
-   * Register Ethereum-compatible blockchain strategies (Reserved for future expansion)
-   * Note: Currently not used in Phase 1, but kept for extensibility
-   */
-  private static registerEthereumCompatibleStrategies(): void {
-    // Future implementation for Phase 2+
-    const ethereumCompatibleChains = [
-      BLOCKCHAINS.ETHEREUM,
-      BLOCKCHAINS.BINANCE_SMART_CHAIN,
-      BLOCKCHAINS.POLYGON,
-      BLOCKCHAINS.AVALANCHE,
-      BLOCKCHAINS.ARBITRUM,
-      BLOCKCHAINS.OPTIMISM
-    ];
-
-    // Import and register EVM strategies when needed for Phase 2+
-    // const { createEvmStrategy } = await import('./strategies/EvmAddressStrategy');
-    // for (const chain of ethereumCompatibleChains) {
-    //   const strategy = createEvmStrategy(chain);
-    //   addressStrategyRegistry.registerWithValidation(strategy);
-    // }
-  }
-
-  /**
-   * Register other blockchain strategies (Reserved for future expansion)
-   * Note: Currently not used in Phase 1, but kept for extensibility
-   */
-  private static registerOtherStrategies(): void {
-    // Future implementation for Phase 2+
-    // Bitcoin strategy
-    // const { createBitcoinStrategy } = await import('./strategies/BitcoinAddressStrategy');
-    // const bitcoinStrategy = createBitcoinStrategy();
-    // addressStrategyRegistry.registerWithValidation(bitcoinStrategy);
-
-    // TRON strategy
-    // const { createTronStrategy } = await import('./strategies/TronAddressStrategy');
-    // const tronStrategy = createTronStrategy();
-    // addressStrategyRegistry.registerWithValidation(tronStrategy);
-  }
 
   /**
    * Register custom strategy (for third-party extensions)

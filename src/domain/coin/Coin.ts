@@ -126,20 +126,9 @@ export interface CoinJSON {
 }
 
 // Supported blockchain constants (each requires specific adapter)
-// Phase 1: Only Solana is supported, but architecture maintains extensibility
+// Phase 1: Only Solana is supported
 export const BLOCKCHAINS = {
-  // Phase 1 - Primary supported blockchain
-  SOLANA: 'SOLANA',
-  
-  // Reserved for future phases (Phase 2+)
-  ETHEREUM: 'ETH',
-  TRON: 'TRON',
-  BITCOIN: 'BITCOIN',
-  BINANCE_SMART_CHAIN: 'BSC',
-  POLYGON: 'POLYGON',
-  AVALANCHE: 'AVAX',
-  ARBITRUM: 'ARBITRUM',
-  OPTIMISM: 'OPTIMISM'
+  SOLANA: 'SOLANA'
 } as const;
 
 // Type guard for blockchain validation

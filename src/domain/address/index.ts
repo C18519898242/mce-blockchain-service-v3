@@ -17,10 +17,7 @@ export { AddressStrategyRegistry, addressStrategyRegistry } from './AddressStrat
 export { StrategyInitializer } from './StrategyInitializer';
 
 // Strategy Implementations
-export { EvmAddressStrategy, createEvmStrategy } from './strategies/EvmAddressStrategy';
 export { SolanaAddressStrategy, createSolanaStrategy } from './strategies/SolanaAddressStrategy';
-export { BitcoinAddressStrategy, createBitcoinStrategy } from './strategies/BitcoinAddressStrategy';
-export { TronAddressStrategy, createTronStrategy } from './strategies/TronAddressStrategy';
 
 // Re-export for convenience
 import { AddressDomainService, addressDomainService } from './AddressService';

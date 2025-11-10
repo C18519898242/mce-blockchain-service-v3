@@ -6,7 +6,6 @@
 
 import { AddressDomainService } from '../AddressService';
 import { 
-  EvmAddressStrategy, 
   SolanaAddressStrategy
 } from '../index';
 import { BLOCKCHAINS } from '../../coin/Coin';
@@ -29,12 +28,12 @@ describe('AddressDomainService', () => {
 
   describe('registerStrategy', () => {
     it('should register a new strategy', () => {
-      const customStrategy = new EvmAddressStrategy('CUSTOM');
+      const customStrategy = new SolanaAddressStrategy();
       
       expect(() => addressService.registerCustomStrategy(customStrategy)).not.toThrow();
       
-      // Test that custom strategy works
-      expect(() => addressService.validateAddress('0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0', 'CUSTOM')).not.toThrow();
+      // Test that custom strategy works (using default SOLANA blockchain)
+      expect(() => addressService.validateAddress('11111111111111111111111111111111112', 'SOLANA')).not.toThrow();
     });
 
     it('should throw error for duplicate blockchain', () => {
@@ -121,19 +120,6 @@ describe('AddressDomainService', () => {
       expect(addressService.validateAddress('11111111111111111111111111111111112', undefined as any))
         .toBe(false);
     });
-
-    it('should handle strategy validation errors gracefully', () => {
-      // Register a strategy that throws errors
-      const errorStrategy = new EvmAddressStrategy('ERROR_CHAIN');
-      jest.spyOn(errorStrategy, 'validateAddress').mockImplementation(() => {
-        throw new Error('Strategy error');
-      });
-      
-      addressService.registerCustomStrategy(errorStrategy);
-      
-      // Should return false when strategy throws error
-      expect(addressService.validateAddress('0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0', 'ERROR_CHAIN')).toBe(false);
-    });
   });
 
   describe('Integration with blockchain constants', () => {
@@ -146,29 +132,6 @@ describe('AddressDomainService', () => {
         expect(addressService.validateAddress(address as string, blockchain)).toBe(true);
         expect(addressService.isSupported(blockchain)).toBe(true);
       });
-    });
-  });
-
-  describe('Extensibility Tests', () => {
-    it('should support adding new blockchain strategies', () => {
-      // Test that the architecture allows for future expansion
-      const ethStrategy = new EvmAddressStrategy(BLOCKCHAINS.ETHEREUM);
-      
-      expect(() => addressService.registerCustomStrategy(ethStrategy)).not.toThrow();
-      expect(addressService.isSupported(BLOCKCHAINS.ETHEREUM)).toBe(true);
-      
-      // Test Ethereum address validation
-      expect(addressService.validateAddress('0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb0', BLOCKCHAINS.ETHEREUM)).toBe(true);
-    });
-
-    it('should maintain Solana functionality when new strategies are added', () => {
-      // Add a new strategy
-      const btcStrategy = new EvmAddressStrategy('BITCOIN');
-      addressService.registerCustomStrategy(btcStrategy);
-      
-      // Solana should still work
-      expect(addressService.validateAddress('11111111111111111111111111111111112', 'SOLANA')).toBe(true);
-      expect(addressService.isSupported('SOLANA')).toBe(true);
     });
   });
 });
