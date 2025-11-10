@@ -2,9 +2,13 @@
  * Main entry point for MCE Blockchain Service
  */
 
+import * as dotenv from 'dotenv';
 import { App } from './interface/app';
 import { indexRoutes } from './interface/routes/index.routes';
 import { logger } from './infrastructure/logging/logger';
+
+// Load environment variables
+dotenv.config();
 
 logger.info('MCE Blockchain Service V3 - Starting up...');
 

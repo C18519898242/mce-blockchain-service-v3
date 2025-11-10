@@ -6,6 +6,7 @@ import express from 'express';
 import { errorMiddleware } from './middleware/error.middleware';
 import { requestLoggingMiddleware } from './middleware/request-logging.middleware';
 import { logger } from '../infrastructure/logging/logger';
+import { appConfig } from '../config/app.config';
 
 export class App {
   public app: express.Application;
@@ -13,7 +14,12 @@ export class App {
 
   constructor() {
     this.app = express();
-    this.port = 9001;
+    this.port = appConfig.port;
+    logger.info('Application configuration loaded', {
+      portFromEnv: process.env.PORT,
+      configPort: appConfig.port,
+      nodeEnv: process.env.NODE_ENV
+    });
     this.initializeMiddlewares();
   }
 
