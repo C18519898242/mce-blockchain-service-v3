@@ -6,13 +6,13 @@
 ## Goals / Non-Goals
 - **Goals**: 
   - 实现清晰的服务边界，区块链服务专注链上数据
-  - 提供高效的余额查询和监控能力
+  - 提供高效的余额查询能力
   - 支持多链币种的统一管理
-  - 建立可靠的补偿查询机制
 - **Non-Goals**: 
   - 不处理钱包管理和聚合功能
   - 不涉及私钥管理和签名操作
   - 不提供钱包级余额视图
+  - 不保存余额数据（由Wallet Service负责）
 
 ## Decisions
 
@@ -67,6 +67,17 @@
   - 接口和实现都在Infrastructure层（被否决，违反依赖倒置原则）
   - 接口在Application层（被否决，Application层不应包含领域抽象）
 
+### Decision 6: BlockchainAdapter分层设计
+- **What**: IBlockchainAdapter接口定义在Domain层，具体实现在Infrastructure层
+- **Why**:
+  - 符合DDD依赖倒置原则，Domain层定义区块链操作抽象
+  - Application层只依赖Domain抽象，不依赖具体实现
+  - 便于单元测试和Mock
+  - 保持Domain层技术无关性
+- **Alternatives considered**:
+  - IBlockchainAdapter在Infrastructure层（被否决，违反依赖倒置）
+  - 直接在Application层调用SDK（被否决，难以统一管理）
+
 ## Risks / Trade-offs
 
 ### Risk 1: 多链维护复杂度
@@ -77,15 +88,10 @@
   - 建立完善的测试覆盖
 
 ### Risk 2: 性能瓶颈
-- **Risk**: 大量地址监控可能影响响应性能
+- **Risk**: 大量地址查询可能影响响应性能
 - **Mitigation**:
-  - 实现批量操作接口
-  - 使用Redis缓存减少链上查询
-  - 异步处理和事件队列
-
-### Trade-off: 内存使用 vs 响应速度
-- **Trade-off**: 缓存更多余额数据提高响应速度，但增加内存使用
-- **Decision**: 优先响应速度，使用智能缓存策略和TTL
+  - 使用Redis缓存币种配置减少查询
+  - 异步处理和错误重试
 
 ## Migration Plan
 
@@ -96,17 +102,16 @@
 4. 建立基础的错误处理和日志
 
 ### Phase 2: 核心功能
-1. 实现Ethereum适配器
+1. 实现Solana适配器（Mock）
 2. 实现地址生成和验证逻辑
-3. 实现余额查询和监控逻辑
+3. 实现余额查询逻辑
 4. 创建基础的REST API
 5. 添加单元测试
 
 ### Phase 3: 扩展功能
-1. 实现Solana适配器
-2. 添加批量操作支持
-3. 实现事件推送机制
-4. 性能优化和监控
+1. 实现真实Solana适配器
+2. 添加Ethereum适配器
+3. 性能优化和监控
 
 ### Phase 4: 完善和集成
 1. 添加TRON和BTC支持
@@ -117,9 +122,7 @@
 ## Open Questions
 
 1. **币种配置管理**: 是否需要动态添加新币种，还是配置文件管理？
-2. **监控策略**: 轮询vs WebSocket，如何平衡实时性和资源消耗？
-3. **缓存策略**: 不同币种的TTL设置，如何优化？
-4. **错误重试**: 链上查询失败时的重试策略和退避算法？
+2. **错误重试**: 链上查询失败时的重试策略和退避算法？
 
 ## Data Models
 
@@ -174,11 +177,12 @@ export interface ICoinRepository {
   findByBlockchain(blockchain: string): Promise<Coin[]>;
 }
 
-// src/domain/balance/interfaces/IBalanceRepository.ts
-export interface IBalanceRepository {
-  findByAddressAndCoin(address: string, coinKey: string): Promise<AddressBalance | null>;
-  findBalancesByAddress(address: string): Promise<AddressBalance[]>;
-  findBalancesByCoin(coinKey: string): Promise<AddressBalance[]>;
+// src/domain/blockchain/IBlockchainAdapter.ts
+export interface IBlockchainAdapter {
+  getBalance(address: string, coin: Coin): Promise<number>;
+  getLatestBlockNumber(): Promise<number>;
+  validateAddress(address: string): boolean;
+  generateAddressFromPublicKey(publicKey: string): string;
 }
 
 // src/domain/address/interfaces/IAddressRepository.ts
@@ -208,18 +212,58 @@ export class CoinRepository implements ICoinRepository {
   // ... 其他实现
 }
 
-// src/infrastructure/blockchain/BalanceRepository.ts
-export class BalanceRepository implements IBalanceRepository {
+// src/infrastructure/persistence/redis/AddressRepository.ts
+export class AddressRepository implements IAddressRepository {
+  constructor(private redisService: RedisService) {}
+  
+  async findByPublicKeyAndChain(publicKey: string, blockchain: string): Promise<string | null> {
+    return await this.redisService.get(`addresses:${publicKey}:${blockchain}`);
+  }
+  
+  async saveAddressMapping(publicKey: string, blockchain: string, address: string): Promise<void> {
+    await this.redisService.set(`addresses:${publicKey}:${blockchain}`, address);
+  }
+  
+  // ... 其他实现
+}
+
+// src/infrastructure/api/solana.adapter.ts - Mock实现
+export class SolanaBlockchainAdapter implements IBlockchainAdapter {
+  async getBalance(address: string, coin: Coin): Promise<number> {
+    // Mock实现，返回模拟余额
+    return 1000000; // 1 USDT (6 decimals)
+  }
+  
+  async getLatestBlockNumber(): Promise<number> {
+    return 123456; // Mock区块号
+  }
+  
+  validateAddress(address: string): boolean {
+    // Mock地址验证
+    return address.length > 0;
+  }
+  
+  generateAddressFromPublicKey(publicKey: string): string {
+    // Mock地址生成
+    return `mock_address_${publicKey.substring(0, 8)}`;
+  }
+}
+```
+
+### Application Service Layer
+```typescript
+// src/services/balance.service.ts
+export class BalanceApplicationService {
   constructor(
-    private blockchainAdapter: IBlockchainAdapter,
-    private coinRepository: ICoinRepository
+    private blockchainAdapter: IBlockchainAdapter,  // Domain层接口
+    private coinRepository: ICoinRepository      // Domain层接口
   ) {}
   
-  async findByAddressAndCoin(address: string, coinKey: string): Promise<AddressBalance | null> {
-    // 从区块链实时获取余额数据
+  async getBalance(address: string, coinKey: string): Promise<AddressBalance | null> {
     const coin = await this.coinRepository.findByKey(coinKey);
     if (!coin) return null;
     
+    // 直接调用区块链适配器，不需要Repository层
     const balance = await this.blockchainAdapter.getBalance(address, coin);
     
     return new AddressBalance(
@@ -229,27 +273,6 @@ export class BalanceRepository implements IBalanceRepository {
       new Date().toISOString(),
       await this.blockchainAdapter.getLatestBlockNumber()
     );
-  }
-  
-  async findBalancesByAddress(address: string): Promise<AddressBalance[]> {
-    // 获取所有币种，然后批量查询余额
-    const coins = await this.coinRepository.findAll();
-    const balances: AddressBalance[] = [];
-    
-    for (const coin of coins) {
-      const balance = await this.findByAddressAndCoin(address, coin.key);
-      if (balance) {
-        balances.push(balance);
-      }
-    }
-    
-    return balances;
-  }
-  
-  async findBalancesByCoin(coinKey: string): Promise<AddressBalance[]> {
-    // 这个方法需要监控的地址列表，实际实现可能需要从其他地方获取
-    // 暂时返回空数组，具体实现根据业务需求调整
-    return [];
   }
 }
 ```
@@ -263,8 +286,6 @@ export class BalanceRepository implements IBalanceRepository {
 
 ### 余额相关接口
 - `GET /api/balance/:coinKey/:address` - 单地址余额查询
-- `POST /api/balance/batch` - 批量余额查询
-- `POST /api/monitor/start` - 开始监控地址余额
 
 ## Redis Data Patterns
 
@@ -275,18 +296,24 @@ coin:${coinKey} → Coin对象
 
 # 地址映射（公钥到地址）
 addresses:${publicKey}:${blockchain} → address
-
-# 监控状态
-monitor:${coinKey}:${address} → MonitorStatus
 ```
 
-### 集合和索引
+## Service Boundaries
+
+### Blockchain Service 职责
+- 提供实时链上数据查询
+- 管理币种配置信息
+- 地址生成和验证
+- 不保存余额数据
+
+### Wallet Service 职责
+- 管理用户钱包信息
+- 保存和聚合余额数据
+- 提供钱包级视图
+- 调用Blockchain Service获取链上数据
+
+### 数据流向
 ```
-# 所有活跃地址
-addresses:active:${coinKey} → Set<address>
-
-# 监控列表
-monitors:active → Set<coinKey:address>
-
-# 余额变化事件流
-events:balance:changes → Stream<BalanceChangeEvent>
+Wallet Service → 调用 → Blockchain Service → 查询 → 区块链网络
+     ↑                                              ↑
+   存储余额                                    实时查询
