@@ -23,6 +23,7 @@ Provide standardized transaction format and APIs (build/scan/broadcast), focusin
 - **类名**: PascalCase (UserService)
 - **代码格式**: 2 spaces, semicolons, single quotes
 - **注释**: JSDoc, English only
+- **导入路径**: 使用路径别名（如 `@domain/*`、`@infrastructure/*`、`@services/*`），避免深层的相对路径（`../../`）
 
 ### Architecture Patterns
 - **DDD 分层**: Domain (业务逻辑) → Application (编排) → Infrastructure (技术)
