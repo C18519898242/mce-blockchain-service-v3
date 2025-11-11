@@ -3,7 +3,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { logger } from '../../infrastructure/logging/logger';
+import { logger } from '@infrastructure/logging/logger';
 
 const router = Router();
 

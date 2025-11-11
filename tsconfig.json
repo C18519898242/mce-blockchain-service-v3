@@ -1,4 +1,18 @@
 {
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["src/*"],
+        "@domain/*": ["src/domain/*"],
+        "@infrastructure/*": ["src/infrastructure/*"],
+        "@interface/*": ["src/interface/*"],
+        "@services/*": ["src/services/*"],
+        "@config/*": ["src/config/*"]
+      }
+    }
+  },
   "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
@@ -14,7 +28,16 @@
     "declarationMap": true,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@domain/*": ["src/domain/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@interface/*": ["src/interface/*"],
+      "@services/*": ["src/services/*"],
+      "@config/*": ["src/config/*"]
+    }
   },
   "include": [
     "src/**/*"

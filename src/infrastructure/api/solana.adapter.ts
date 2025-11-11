@@ -1,5 +1,5 @@
-import { IBlockchainAdapter } from '../../domain/blockchain/IBlockchainAdapter';
-import { Coin } from '../../domain/coin/Coin';
+import { IBlockchainAdapter } from '@domain/blockchain/IBlockchainAdapter';
+import { Coin } from '@domain/coin/Coin';
 
 /**
  * Solana Blockchain Adapter - Mock Implementation

@@ -3,7 +3,7 @@
  */
 
 import * as winston from 'winston';
-import { loggingConfig, LogLevel } from '../../config/logging.config';
+import { loggingConfig, LogLevel } from '@config/logging.config';
 
 export class Logger {
   private static instance: winston.Logger;

@@ -5,8 +5,8 @@
 import express from 'express';
 import { errorMiddleware } from './middleware/error.middleware';
 import { requestLoggingMiddleware } from './middleware/request-logging.middleware';
-import { logger } from '../infrastructure/logging/logger';
-import { appConfig } from '../config/app.config';
+import { logger } from '@infrastructure/logging/logger';
+import { appConfig } from '@config/app.config';
 
 export class App {
   public app: express.Application;

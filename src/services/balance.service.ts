@@ -1,7 +1,7 @@
-import { IBlockchainAdapter } from '../domain/blockchain/IBlockchainAdapter';
-import { ICoinRepository } from '../domain/coin/interfaces/ICoinRepository';
-import { Coin } from '../domain/coin/Coin';
-import { AddressBalance } from '../domain/balance/AddressBalance';
+import { IBlockchainAdapter } from '@domain/blockchain/IBlockchainAdapter';
+import { ICoinRepository } from '@domain/coin/interfaces/ICoinRepository';
+import { Coin } from '@domain/coin/Coin';
+import { AddressBalance } from '@domain/balance/AddressBalance';
 
 /**
  * Balance Application Service

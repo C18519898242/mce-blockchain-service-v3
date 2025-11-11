@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 import { Logger } from 'winston';
-import { redisConfig } from '../../config/redis.config';
+import { redisConfig } from '@config/redis.config';
 import { RedisConnection } from './redis.connection';
 import { RedisErrorHandler, RedisError } from './redis.error-handler';
 import { 
