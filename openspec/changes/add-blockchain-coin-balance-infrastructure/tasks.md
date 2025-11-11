@@ -15,18 +15,18 @@
 
 ## 3. Redis仓储层实现
 - [x] 3.1 创建Domain层Repository接口（domain/coin/interfaces/ICoinRepository.ts）
-- [ ] 3.2 创建Domain层BlockchainAdapter接口（domain/blockchain/IBlockchainAdapter.ts）
+- [x] 3.2 创建Domain层BlockchainAdapter接口（domain/blockchain/IBlockchainAdapter.ts）
 - [ ] 3.3 创建Domain层Repository接口（domain/address/interfaces/IAddressRepository.ts）
 - [x] 3.4 实现Infrastructure层CoinRepository（infrastructure/persistence/redis/CoinRepository.ts）
 - [ ] 3.5 实现Infrastructure层AddressRepository（infrastructure/persistence/redis/AddressRepository.ts）
-- [ ] 3.6 实现Infrastructure层SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
+- [x] 3.6 实现Infrastructure层SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
 - [ ] 3.7 添加Redis操作的事务支持（仅用于Coin和Address数据）
 - [x] 3.8 创建Repository接口和实现的单元测试
 
 ## 4. 区块链适配器实现
-- [ ] 4.1 实现SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
+- [x] 4.1 实现SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
 - [ ] 4.2 集成@solana/web3.js SDK
-- [ ] 4.3 实现余额查询功能
+- [x] 4.3 实现余额查询功能
 - [ ] 4.4 实现地址生成功能
 - [ ] 4.5 添加错误处理和重试机制
 - [ ] 4.6 创建适配器工厂模式
@@ -40,29 +40,29 @@
 - [ ] 5.6 实现缓存策略
 
 ## 6. 余额服务实现
-- [ ] 6.1 创建BalanceApplicationService（services/balance.service.ts）
-- [ ] 6.2 实现单地址余额查询（直接调用blockchainAdapter）
-- [ ] 6.3 移除批量余额查询（过度设计）
-- [ ] 6.4 移除余额变化监控（过度设计）
-- [ ] 6.5 移除事件推送机制（过度设计）
-- [ ] 6.6 移除补偿查询接口（过度设计）
+- [x] 6.1 创建BalanceApplicationService（services/balance.service.ts）
+- [x] 6.2 实现单地址余额查询（直接调用blockchainAdapter）
+- [x] 6.3 移除批量余额查询（过度设计）
+- [x] 6.4 移除余额变化监控（过度设计）
+- [x] 6.5 移除事件推送机制（过度设计）
+- [x] 6.6 移除补偿查询接口（过度设计）
 
 ## 7. API接口层实现
 - [ ] 7.1 创建地址相关路由（interface/routes/address.routes.ts）
 - [ ] 7.2 实现地址生成API端点
 - [ ] 7.3 实现地址验证API端点
-- [ ] 7.4 创建余额相关路由（interface/routes/balance.routes.ts）
-- [ ] 7.5 实现余额查询API端点
-- [ ] 7.6 移除批量查询API端点（过度设计）
+- [x] 7.4 创建余额相关路由（interface/routes/balance.routes.ts）
+- [x] 7.5 实现余额查询API端点
+- [x] 7.6 移除批量查询API端点（过度设计）
 - [ ] 7.7 添加请求验证中间件
 - [ ] 7.8 集成到主路由系统
 
 ## 8. 数据传输对象实现
 - [ ] 8.1 创建地址相关DTO（interface/dto/address.dto.ts）
-- [ ] 8.2 创建余额相关DTO（interface/dto/balance.dto.ts）
+- [x] 8.2 创建余额相关DTO（interface/dto/balance.dto.ts）
 - [ ] 8.3 创建请求验证模式
 - [ ] 8.4 创建响应格式化工具
-- [ ] 8.5 添加DTO的单元测试
+- [x] 8.5 添加DTO的单元测试
 
 ## 9. 配置和环境设置
 - [ ] 9.1 更新package.json添加新依赖
@@ -72,7 +72,7 @@
 - [ ] 9.5 更新README.md文档
 
 ## 10. 测试实现
-- [ ] 10.1 创建单元测试覆盖
+- [x] 10.1 创建单元测试覆盖
 - [ ] 10.2 创建集成测试
 - [ ] 10.3 创建API端到端测试
 - [ ] 10.4 添加测试数据工厂
@@ -96,7 +96,7 @@
 ## 13. 归档和交付
 - [ ] 13.1 执行OpenSpec归档流程
 - [ ] 13.2 提交所有代码变更
-- [ ] 13.3 创建发布说明文档
+- [x] 13.3 创建发布说明文档
 - [ ] 13.4 进行代码审查
 - [ ] 13.5 部署到测试环境
 - [ ] 13.6 获取最终验收确认
