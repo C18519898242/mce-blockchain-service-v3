@@ -16,12 +16,11 @@
 ## 3. Redis仓储层实现
 - [x] 3.1 创建Domain层Repository接口（domain/coin/interfaces/ICoinRepository.ts）
 - [x] 3.2 创建Domain层BlockchainAdapter接口（domain/blockchain/IBlockchainAdapter.ts）
-- [ ] 3.3 创建Domain层Repository接口（domain/address/interfaces/IAddressRepository.ts）
+- [x] 3.3 创建Domain层Repository接口（domain/address/interfaces/IAddressRepository.ts）
 - [x] 3.4 实现Infrastructure层CoinRepository（infrastructure/persistence/redis/CoinRepository.ts）
-- [ ] 3.5 实现Infrastructure层AddressRepository（infrastructure/persistence/redis/AddressRepository.ts）
+- [x] 3.5 实现Infrastructure层AddressRepository（infrastructure/persistence/redis/AddressRepository.ts）
 - [x] 3.6 实现Infrastructure层SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
-- [ ] 3.7 添加Redis操作的事务支持（仅用于Coin和Address数据）
-- [x] 3.8 创建Repository接口和实现的单元测试
+- [x] 3.7 创建Repository接口和实现的单元测试
 
 ## 4. 区块链适配器实现
 - [x] 4.1 实现SolanaBlockchainAdapter（infrastructure/api/solana.adapter.ts）- Mock实现
