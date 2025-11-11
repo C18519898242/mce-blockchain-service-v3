@@ -51,7 +51,7 @@ export class SolanaBlockchainAdapter implements IBlockchainAdapter {
   validateAddress(address: string): boolean {
     // Mock implementation - basic validation
     // Real implementation will validate actual Solana address format (base58, 32-44 chars)
-    return address && address.length >= 32 && address.length <= 44;
+    return !!(address && address.length >= 32 && address.length <= 44);
   }
 
   /**

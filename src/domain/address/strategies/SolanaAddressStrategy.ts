@@ -3,7 +3,8 @@
  * Implements address operations for Solana blockchain
  */
 
-import { IAddressStrategy, AddressFormat } from '../interfaces/IAddressStrategy';
+import { IAddressStrategy } from '../interfaces/IAddressStrategy';
+import { AddressFormat } from '../types/AddressFormat';
 
 export class SolanaAddressStrategy implements IAddressStrategy {
   readonly blockchain = 'SOLANA';

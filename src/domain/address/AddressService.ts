@@ -6,7 +6,8 @@
 
 import { addressStrategyRegistry } from './AddressStrategyRegistry';
 import { StrategyInitializer } from './StrategyInitializer';
-import { IAddressStrategy, AddressFormat } from './interfaces/IAddressStrategy';
+import { IAddressStrategy } from './interfaces/IAddressStrategy';
+import { AddressFormat } from './types/AddressFormat';
 
 export interface AddressInfo {
   readonly blockchain: string;

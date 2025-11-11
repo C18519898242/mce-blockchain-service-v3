@@ -8,7 +8,8 @@ export { AddressDomainService, addressDomainService } from './AddressService';
 export type { AddressInfo } from './AddressService';
 
 // Strategy Interface
-export { IAddressStrategy, AddressFormat } from './interfaces/IAddressStrategy';
+export { IAddressStrategy } from './interfaces/IAddressStrategy';
+export { AddressFormat } from './types/AddressFormat';
 
 // Registry
 export { AddressStrategyRegistry, addressStrategyRegistry } from './AddressStrategyRegistry';

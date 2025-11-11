@@ -1,4 +1,4 @@
-import { Coin } from '../../coin/Coin';
+import { Coin } from '../coin/Coin';
 
 /**
  * Blockchain Adapter Interface

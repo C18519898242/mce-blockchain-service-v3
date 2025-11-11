@@ -1,3 +1,5 @@
+import { AddressFormat } from '../types/AddressFormat';
+
 /**
  * Address Strategy Interface
  * Defines the contract for blockchain-specific address operations
@@ -41,8 +43,4 @@ export interface IAddressStrategy {
    * Validate public key format for this blockchain
    */
   validatePublicKey(publicKey: string): boolean;
-}
-
-export enum AddressFormat {
-  SOLANA = 'solana'        // Base58 with 32-44 chars
 }
