@@ -6,6 +6,8 @@
  * Only Solana blockchain is supported
  */
 
+import { BLOCKCHAINS } from '../blockchain/blockchain.constants';
+
 export interface CoinProperties {
   readonly key: string;             // 唯一标识：SOLANA_SOL, SOLANA_USDT
   readonly testKey?: string;        // 测试网络密钥
@@ -273,10 +275,6 @@ export interface CoinJSON {
   contractAddress?: string;
 }
 
-// Supported blockchain constants - Only Solana is supported
-export const BLOCKCHAINS = {
-  SOLANA: 'SOLANA'
-} as const;
 
 // Network constants
 export const NETWORKS = {
@@ -289,18 +287,3 @@ export const COIN_TYPES = {
   NATIVE: 'native',
   TOKEN: 'token'
 } as const;
-
-// Type guard for blockchain validation
-export function isValidBlockchain(value: string): value is keyof typeof BLOCKCHAINS {
-  return Object.values(BLOCKCHAINS).includes(value as typeof BLOCKCHAINS[keyof typeof BLOCKCHAINS]);
-}
-
-// Type guard for network validation
-export function isValidNetwork(value: string): value is keyof typeof NETWORKS {
-  return Object.values(NETWORKS).includes(value as typeof NETWORKS[keyof typeof NETWORKS]);
-}
-
-// Type guard for coin type validation
-export function isValidCoinType(value: string): value is keyof typeof COIN_TYPES {
-  return Object.values(COIN_TYPES).includes(value as typeof COIN_TYPES[keyof typeof COIN_TYPES]);
-}

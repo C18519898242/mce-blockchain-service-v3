@@ -8,7 +8,7 @@ import { AddressDomainService } from '../AddressService';
 import { 
   SolanaAddressStrategy
 } from '../index';
-import { BLOCKCHAINS } from '../../coin/Coin';
+import { BLOCKCHAINS } from '../../blockchain/blockchain.constants';
 
 describe('AddressDomainService', () => {
   let addressService: AddressDomainService;

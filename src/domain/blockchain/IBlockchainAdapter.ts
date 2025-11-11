@@ -1,4 +1,5 @@
 import { Coin } from '../coin/Coin';
+import { BLOCKCHAINS } from './blockchain.constants';
 
 /**
  * Blockchain Adapter Interface

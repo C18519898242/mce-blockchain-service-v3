@@ -1,6 +1,5 @@
-- [x] 询问用户具体需求
-- [x] 检查项目的构建工具配置  
-- [x] 配置TypeScript路径别名
-- [x] 配置tsx路径别名支持
-- [x] 更新现有代码中的所有导入语句
-- [x] 测试配置是否生效
+- [x] 分析当前 BLOCKCHAINS 的使用情况
+- [x] 在 domain/blockchain 包中创建区块链常量定义
+- [x] 更新 Coin.ts 文件，移除 BLOCKCHAINS 定义
+- [x] 更新所有引用 BLOCKCHAINS 的文件
+- [x] 测试重构后的代码

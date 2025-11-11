@@ -7,7 +7,7 @@
 
 import { addressStrategyRegistry } from './AddressStrategyRegistry';
 import { createSolanaStrategy } from './strategies/SolanaAddressStrategy';
-import { BLOCKCHAINS } from '../coin/Coin';
+import { BLOCKCHAINS } from '../blockchain/blockchain.constants';
 
 export class StrategyInitializer {
   /**

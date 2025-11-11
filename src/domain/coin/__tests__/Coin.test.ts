@@ -7,13 +7,13 @@ import {
   Coin, 
   CoinProperties, 
   CoinJSON,
-  BLOCKCHAINS, 
   NETWORKS,
-  COIN_TYPES,
-  isValidBlockchain,
-  isValidNetwork,
-  isValidCoinType
+  COIN_TYPES
 } from '../Coin';
+import { 
+  BLOCKCHAINS,
+  isValidBlockchain
+} from '../../blockchain/blockchain.constants';
 
 describe('Coin Entity', () => {
   describe('Constructor', () => {
@@ -564,30 +564,6 @@ describe('Coin Entity', () => {
         expect(isValidBlockchain('BTC')).toBe(false);
         expect(isValidBlockchain('TRON')).toBe(false);
         expect(isValidBlockchain('')).toBe(false);
-      });
-    });
-
-    describe('isValidNetwork', () => {
-      it('should validate known networks', () => {
-        expect(isValidNetwork('mainnet')).toBe(true);
-        expect(isValidNetwork('testnet')).toBe(true);
-      });
-
-      it('should reject unknown networks', () => {
-        expect(isValidNetwork('')).toBe(false);
-        expect(isValidNetwork('invalid')).toBe(false);
-      });
-    });
-
-    describe('isValidCoinType', () => {
-      it('should validate known coin types', () => {
-        expect(isValidCoinType('native')).toBe(true);
-        expect(isValidCoinType('token')).toBe(true);
-      });
-
-      it('should reject unknown coin types', () => {
-        expect(isValidCoinType('')).toBe(false);
-        expect(isValidCoinType('invalid')).toBe(false);
       });
     });
   });
