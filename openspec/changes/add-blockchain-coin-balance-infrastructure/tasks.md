@@ -28,11 +28,12 @@
 - [x] 4.3 实现余额查询功能
 - [x] 4.4 实现地址生成功能
 - [ ] 4.5 创建适配器工厂模式
+- [x] 4.6 实现区块链ID和名称的兼容查询功能（支持通过BTC、Bitcoin或Btccoin等名称匹配）
 
 ## 5. 应用服务层实现
-- [ ] 5.1 创建AddressApplicationService（services/address.service.ts）
-- [ ] 5.2 实现地址生成应用服务
-- [ ] 5.3 实现地址验证应用服务
+- [x] 5.1 创建AddressApplicationService（services/address.service.ts）
+- [x] 5.2 实现地址生成应用服务
+- [x] 5.3 实现地址验证应用服务
 
 ## 6. 余额服务实现
 - [x] 6.1 创建BalanceApplicationService（services/balance.service.ts）

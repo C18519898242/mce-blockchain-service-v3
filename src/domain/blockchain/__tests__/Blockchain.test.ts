@@ -78,4 +78,59 @@ describe('Blockchain', () => {
       expect(blockchain1.getId()).not.toBe(blockchain2.getId());
     });
   });
+  
+  describe('matchesId', () => {
+    it('should return true when matching by exact ID (case-insensitive)', () => {
+      const blockchain = new Blockchain('BTC', 'Bitcoin', AddressFormat.SOLANA);
+      
+      expect(blockchain.matchesId('BTC')).toBe(true);
+      expect(blockchain.matchesId('btc')).toBe(true);
+      expect(blockchain.matchesId('Btc')).toBe(true);
+    });
+    
+    it('should return true when matching by blockchain name (case-insensitive)', () => {
+      const blockchain = new Blockchain('BTC', 'Bitcoin', AddressFormat.SOLANA);
+      
+      expect(blockchain.matchesId('Bitcoin')).toBe(true);
+      expect(blockchain.matchesId('bitcoin')).toBe(true);
+      expect(blockchain.matchesId('BITCOIN')).toBe(true);
+      expect(blockchain.matchesId('BitCoin')).toBe(true);
+    });
+    
+    it('should return true when matching by blockchain name with "coin" suffix (case-insensitive)', () => {
+      const blockchain = new Blockchain('BTC', 'Bitcoin', AddressFormat.SOLANA);
+      
+      expect(blockchain.matchesId('BitcoinCoin')).toBe(true);
+      expect(blockchain.matchesId('bitcoincoin')).toBe(true);
+      expect(blockchain.matchesId('BITCOINCOIN')).toBe(true);
+      expect(blockchain.matchesId('BitCoinCoin')).toBe(true);
+    });
+    
+    it('should return false for non-matching values', () => {
+      const blockchain = new Blockchain('BTC', 'Bitcoin', AddressFormat.SOLANA);
+      
+      expect(blockchain.matchesId('ETH')).toBe(false);
+      expect(blockchain.matchesId('Ethereum')).toBe(false);
+      expect(blockchain.matchesId('INVALID')).toBe(false);
+    });
+    
+    it('should handle SOLANA blockchain correctly', () => {
+      // Test with SOLANA constant
+      expect(SOLANA.matchesId('SOLANA')).toBe(true);
+      expect(SOLANA.matchesId('solana')).toBe(true);
+      expect(SOLANA.matchesId('Solana')).toBe(true);
+      expect(SOLANA.matchesId('SolanaCoin')).toBe(true);
+      expect(SOLANA.matchesId('solanaCoin')).toBe(true);
+      expect(SOLANA.matchesId('SOLANACOIN')).toBe(true);
+    });
+    
+    it('should return false for empty or null values', () => {
+      const blockchain = new Blockchain('BTC', 'Bitcoin', AddressFormat.SOLANA);
+      
+      expect(blockchain.matchesId('')).toBe(false);
+      expect(blockchain.matchesId('   ')).toBe(false);
+      expect(blockchain.matchesId(null as any)).toBe(false);
+      expect(blockchain.matchesId(undefined as any)).toBe(false);
+    });
+  });
 });

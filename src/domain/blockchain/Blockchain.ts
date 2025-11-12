@@ -68,12 +68,35 @@ export class Blockchain {
   }
 
   /**
-   * Check if this blockchain matches the provided ID
+   * Check if this blockchain matches the provided ID or name
+   * Supports matching by:
+   * 1. Blockchain ID (case-insensitive)
+   * 2. Blockchain name (case-insensitive)
+   * 3. Blockchain name with "coin" suffix (case-insensitive)
    * 
-   * @param id The ID to check against
+   * @param id The ID or name to check against
    */
   public matchesId(id: string): boolean {
-    return id.toUpperCase() === this.id;
+    if (!id || !id.trim()) {
+      return false;
+    }
+    
+    const normalizedId = id.toUpperCase();
+    const normalizedName = this.name.toUpperCase();
+    
+    // Check if it matches the blockchain ID (case-insensitive)
+    if (normalizedId === this.id) {
+      return true;
+    }
+    
+    // Check if it matches the blockchain name (case-insensitive)
+    if (normalizedId === normalizedName) {
+      return true;
+    }
+    
+    // Check if it matches the blockchain name with "coin" suffix (case-insensitive)
+    // For example: "BTC" matches "BITCOIN" and "BITCOINCOIN"
+    return normalizedId === normalizedName + 'COIN';
   }
 
   /**
