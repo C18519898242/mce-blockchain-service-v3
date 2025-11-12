@@ -33,9 +33,6 @@
 - [ ] 5.1 创建AddressApplicationService（services/address.service.ts）
 - [ ] 5.2 实现地址生成应用服务
 - [ ] 5.3 实现地址验证应用服务
-- [ ] 5.4 集成Redis仓储和区块链适配器
-- [ ] 5.5 添加业务逻辑验证
-- [ ] 5.6 实现缓存策略
 
 ## 6. 余额服务实现
 - [x] 6.1 创建BalanceApplicationService（services/balance.service.ts）
