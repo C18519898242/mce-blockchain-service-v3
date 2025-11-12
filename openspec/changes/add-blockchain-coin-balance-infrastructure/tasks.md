@@ -49,13 +49,14 @@
 - [x] 7.4 创建余额相关路由（interface/routes/balance.routes.ts）
 - [x] 7.5 实现余额查询API端点
 - [x] 7.6 移除批量查询API端点（过度设计）
-- [ ] 7.7 添加请求验证中间件
-- [ ] 7.8 集成到主路由系统
+- [x] 7.7 添加请求验证中间件
+- [x] 7.8 集成地址路由到主路由系统
+- [ ] 7.9 集成余额路由到主路由系统
 
 ## 8. 数据传输对象实现
-- [ ] 8.1 创建地址相关DTO（interface/dto/address.dto.ts）
+- [x] 8.1 创建地址相关DTO（interface/dto/address.dto.ts）
 - [x] 8.2 创建余额相关DTO（interface/dto/balance.dto.ts）
-- [ ] 8.3 创建请求验证模式
+- [x] 8.3 创建请求验证模式
 - [ ] 8.4 创建响应格式化工具
 - [x] 8.5 添加DTO的单元测试
 
