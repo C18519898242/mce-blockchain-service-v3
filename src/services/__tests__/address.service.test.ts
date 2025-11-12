@@ -22,10 +22,26 @@ describe('AddressApplicationService', () => {
   });
 
   describe('generateAddress', () => {
-    it('should generate address successfully when valid parameters are provided', () => {
+    it('should generate address successfully when valid parameters are provided with uppercase blockchain ID', () => {
       // Arrange
       const publicKey = 'testPublicKey';
       const blockchain = 'SOLANA';
+      const expectedAddress = 'solana123456789';
+      
+      mockAddressDomainService.generateAddress.mockReturnValue(expectedAddress);
+
+      // Act
+      const result = addressApplicationService.generateAddress(publicKey, blockchain);
+
+      // Assert
+      expect(result).toBe(expectedAddress);
+      expect(mockAddressDomainService.generateAddress).toHaveBeenCalledWith(publicKey, blockchain);
+    });
+    
+    it('should generate address successfully when valid parameters are provided with proper case blockchain name', () => {
+      // Arrange
+      const publicKey = 'testPublicKey';
+      const blockchain = 'Solana'; // Using proper case name instead of uppercase ID
       const expectedAddress = 'solana123456789';
       
       mockAddressDomainService.generateAddress.mockReturnValue(expectedAddress);
@@ -84,10 +100,26 @@ describe('AddressApplicationService', () => {
   });
 
   describe('validateAddress', () => {
-    it('should validate address successfully when valid parameters are provided', () => {
+    it('should validate address successfully when valid parameters are provided with uppercase blockchain ID', () => {
       // Arrange
       const address = 'solana123456789';
       const blockchain = 'SOLANA';
+      const expectedValidity = true;
+      
+      mockAddressDomainService.validateAddress.mockReturnValue(expectedValidity);
+
+      // Act
+      const result = addressApplicationService.validateAddress(address, blockchain);
+
+      // Assert
+      expect(result).toBe(expectedValidity);
+      expect(mockAddressDomainService.validateAddress).toHaveBeenCalledWith(address, blockchain);
+    });
+    
+    it('should validate address successfully when valid parameters are provided with proper case blockchain name', () => {
+      // Arrange
+      const address = 'solana123456789';
+      const blockchain = 'Solana'; // Using proper case name instead of uppercase ID
       const expectedValidity = true;
       
       mockAddressDomainService.validateAddress.mockReturnValue(expectedValidity);
