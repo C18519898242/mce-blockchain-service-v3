@@ -27,8 +27,7 @@
 - [x] 4.2 集成@solana/web3.js SDK
 - [x] 4.3 实现余额查询功能
 - [x] 4.4 实现地址生成功能
-- [ ] 4.5 添加错误处理和重试机制
-- [ ] 4.6 创建适配器工厂模式
+- [ ] 4.5 创建适配器工厂模式
 
 ## 5. 应用服务层实现
 - [ ] 5.1 创建AddressApplicationService（services/address.service.ts）
