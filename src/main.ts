@@ -5,6 +5,9 @@
 import * as dotenv from 'dotenv';
 import { App } from './interface/app';
 import { indexRoutes } from './interface/routes/index.routes';
+import { createAddressRoutes } from './interface/routes/address.routes';
+import { AddressApplicationService } from './services/address.service';
+import { getAddressService } from './domain/address';
 import { logger } from './infrastructure/logging/logger';
 
 // Load environment variables
@@ -15,8 +18,13 @@ logger.info('MCE Blockchain Service V3 - Starting up...');
 async function main(): Promise<void> {
   const app = new App();
   
+  // Initialize services
+  const addressDomainService = getAddressService();
+  const addressApplicationService = new AddressApplicationService(addressDomainService);
+  
   // Use routes module
   app.app.use('/', indexRoutes);
+  app.app.use('/api/address', createAddressRoutes(addressApplicationService));
   
   app.listen();
   logger.info('Service initialized successfully');

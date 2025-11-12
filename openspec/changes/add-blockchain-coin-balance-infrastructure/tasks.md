@@ -27,8 +27,7 @@
 - [x] 4.2 集成@solana/web3.js SDK
 - [x] 4.3 实现余额查询功能
 - [x] 4.4 实现地址生成功能
-- [ ] 4.5 创建适配器工厂模式
-- [x] 4.6 实现区块链ID和名称的兼容查询功能（支持通过BTC、Bitcoin或Btccoin等名称匹配）
+- [x] 4.5 实现区块链ID和名称的兼容查询功能（支持通过BTC、Bitcoin或Btccoin等名称匹配）
 
 ## 5. 应用服务层实现
 - [x] 5.1 创建AddressApplicationService（services/address.service.ts）
@@ -44,9 +43,9 @@
 - [x] 6.6 移除补偿查询接口（过度设计）
 
 ## 7. API接口层实现
-- [ ] 7.1 创建地址相关路由（interface/routes/address.routes.ts）
-- [ ] 7.2 实现地址生成API端点
-- [ ] 7.3 实现地址验证API端点
+- [x] 7.1 创建地址相关路由（interface/routes/address.routes.ts）
+- [x] 7.2 实现地址生成API端点
+- [x] 7.3 实现地址验证API端点
 - [x] 7.4 创建余额相关路由（interface/routes/balance.routes.ts）
 - [x] 7.5 实现余额查询API端点
 - [x] 7.6 移除批量查询API端点（过度设计）
