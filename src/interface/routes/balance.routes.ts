@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { BalanceApplicationService } from '../../services/balance.service';
-import { BalanceRequestDTO, BalanceResponseDTO, validateBalanceRequest, createBalanceResponse } from '../dto/balance.dto';
+import { BalanceRequestDTO, BalanceResponseDTO, createBalanceResponse } from '../dto/balance.dto';
+import { validateBalance } from '../middleware/validation.middleware';
 
 /**
  * Balance Routes
@@ -47,7 +48,7 @@ export class BalanceRoutes {
      * @param address The blockchain address to query balance for
      * @returns Balance information or error response
      */
-    this.router.get('/:coinKey/:address', async (req, res) => {
+    this.router.get('/:coinKey/:address', validateBalance, async (req, res) => {
       try {
         const { coinKey, address } = req.params;
         
@@ -56,16 +57,6 @@ export class BalanceRoutes {
           address: decodeURIComponent(address),
           coinKey: decodeURIComponent(coinKey)
         };
-
-        // Validate request
-        const validation = validateBalanceRequest(request);
-        if (!validation.isAddressValid || !validation.isCoinKeyValid) {
-          return res.status(400).json({
-            success: false,
-            error: 'Invalid request parameters',
-            details: validation.errors
-          });
-        }
 
         // Query balance
         const addressBalance = await this.balanceService.getBalance(

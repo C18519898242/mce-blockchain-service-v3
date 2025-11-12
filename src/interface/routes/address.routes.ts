@@ -11,11 +11,10 @@ import {
   AddressGenerateResponseDTO,
   AddressValidateRequestDTO,
   AddressValidateResponseDTO,
-  validateAddressGenerateRequest,
-  validateAddressValidateRequest,
   createAddressGenerateResponse,
   createAddressValidateResponse
 } from '../dto/address.dto';
+import { validateAddressGenerate, validateAddressValidate } from '../middleware/validation.middleware';
 import { logger } from '@infrastructure/logging/logger';
 
 /**
@@ -62,20 +61,10 @@ export class AddressRoutes {
      * @param blockchain The blockchain identifier (e.g., 'SOLANA')
      * @returns Generated address or error response
      */
-    this.router.post('/generate', async (req, res) => {
+    this.router.post('/generate', validateAddressGenerate, async (req, res) => {
       try {
         // Extract request body
         const request: AddressGenerateRequestDTO = req.body;
-
-        // Validate request
-        const validation = validateAddressGenerateRequest(request);
-        if (!validation.isValid) {
-          return res.status(400).json({
-            success: false,
-            error: 'Invalid request parameters',
-            details: validation.errors
-          });
-        }
 
         // Log request
         logger.info('Generating address request', {
@@ -126,20 +115,10 @@ export class AddressRoutes {
      * @param blockchain The blockchain identifier (e.g., 'SOLANA')
      * @returns Validation result or error response
      */
-    this.router.post('/validate', async (req, res) => {
+    this.router.post('/validate', validateAddressValidate, async (req, res) => {
       try {
         // Extract request body
         const request: AddressValidateRequestDTO = req.body;
-
-        // Validate request
-        const validation = validateAddressValidateRequest(request);
-        if (!validation.isValid) {
-          return res.status(400).json({
-            success: false,
-            error: 'Invalid request parameters',
-            details: validation.errors
-          });
-        }
 
         // Log request
         logger.info('Validating address request', {
