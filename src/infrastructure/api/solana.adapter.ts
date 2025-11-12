@@ -1,5 +1,6 @@
 import { IBlockchainAdapter } from '@domain/blockchain/IBlockchainAdapter';
 import { Coin } from '@domain/coin/Coin';
+import { PublicKey } from '@solana/web3.js';
 
 /**
  * Solana Blockchain Adapter - Mock Implementation
@@ -57,15 +58,32 @@ export class SolanaBlockchainAdapter implements IBlockchainAdapter {
   /**
    * Generate Solana address from public key
    * 
-   * Mock implementation that generates a mock address.
-   * Real implementation will use Solana key derivation.
+   * Implementation that uses @solana/web3.js SDK to generate valid Solana addresses
+   * from public keys. Supports both base58 encoded strings and hex encoded public keys.
    * 
-   * @param publicKey The public key to generate address from
-   * @returns Mock Solana address
+   * @param publicKey The public key to generate address from (base58 or hex format)
+   * @returns Valid Solana address in base58 format
+   * @throws Error if the public key format is invalid
    */
   generateAddressFromPublicKey(publicKey: string): string {
-    // Mock implementation - generate mock address
-    // Real implementation will use actual Solana address derivation
-    return `mock_solana_address_${publicKey.substring(0, 8)}`;
+    try {
+      // Handle different public key formats
+      // If it looks like hex (starts with 0x or is 64 characters of hex)
+      const isHex = publicKey.startsWith('0x') || 
+                    (/^[0-9a-fA-F]{64}$/.test(publicKey) && publicKey.length === 64);
+      
+      if (isHex) {
+        // Convert hex to Uint8Array
+        const cleanHex = publicKey.startsWith('0x') ? publicKey.slice(2) : publicKey;
+        const publicKeyBytes = new Uint8Array(cleanHex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
+        return new PublicKey(publicKeyBytes).toString();
+      }
+      
+      // Otherwise assume it's already a base58 encoded public key
+      // Validating it by creating a PublicKey instance
+      return new PublicKey(publicKey).toString();
+    } catch (error) {
+      throw new Error(`Invalid public key format: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 }
