@@ -538,7 +538,7 @@ describe('Coin Entity', () => {
 
   describe('Constants', () => {
     it('should have correct blockchain constants', () => {
-      expect(BLOCKCHAINS.SOLANA).toBe('SOLANA');
+      expect(BLOCKCHAINS.SOLANA.getId()).toBe('SOLANA');
       expect(Object.keys(BLOCKCHAINS)).toHaveLength(1);
     });
 

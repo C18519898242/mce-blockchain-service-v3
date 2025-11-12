@@ -1,3 +1,4 @@
+import { Blockchain } from '../../blockchain/Blockchain';
 import { AddressFormat } from '../types/AddressFormat';
 
 /**
@@ -7,7 +8,7 @@ import { AddressFormat } from '../types/AddressFormat';
  */
 
 export interface IAddressStrategy {
-  readonly blockchain: string;
+  readonly blockchain: Blockchain;
   
   /**
    * Generate address from public key
@@ -23,11 +24,6 @@ export interface IAddressStrategy {
    * Format address for display
    */
   formatAddress(address: string): string;
-  
-  /**
-   * Get the address format type
-   */
-  getFormat(): AddressFormat;
   
   /**
    * Get address length constraints

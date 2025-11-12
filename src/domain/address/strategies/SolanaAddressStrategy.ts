@@ -4,11 +4,10 @@
  */
 
 import { IAddressStrategy } from '../interfaces/IAddressStrategy';
-import { AddressFormat } from '../types/AddressFormat';
+import { SOLANA } from '../../blockchain/blockchain.constants';
 
 export class SolanaAddressStrategy implements IAddressStrategy {
-  readonly blockchain = 'SOLANA';
-  private readonly name = 'Solana';
+  readonly blockchain = SOLANA;
 
   generateAddress(publicKey: string): string {
     if (!this.validatePublicKey(publicKey)) {
@@ -39,10 +38,6 @@ export class SolanaAddressStrategy implements IAddressStrategy {
     }
     
     return address; // Solana addresses are case-sensitive, preserve as-is
-  }
-
-  getFormat(): AddressFormat {
-    return AddressFormat.SOLANA;
   }
 
   getLength(): { min: number; max: number } {
@@ -92,7 +87,7 @@ export class SolanaAddressStrategy implements IAddressStrategy {
 
   // Get strategy info
   public getInfo(): string {
-    return `${this.name} Address Strategy - Base58 encoded addresses`;
+    return `${this.blockchain.getName()} Address Strategy - Base58 encoded addresses`;
   }
 }
 

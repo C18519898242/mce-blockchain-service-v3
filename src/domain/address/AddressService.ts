@@ -8,6 +8,7 @@ import { addressStrategyRegistry } from './AddressStrategyRegistry';
 import { StrategyInitializer } from './StrategyInitializer';
 import { IAddressStrategy } from './interfaces/IAddressStrategy';
 import { AddressFormat } from './types/AddressFormat';
+import { Blockchain } from '../blockchain/Blockchain';
 
 export interface AddressInfo {
   readonly blockchain: string;
@@ -50,7 +51,7 @@ export class AddressDomainService {
   /**
    * Generate single address for specific blockchain
    */
-  public generateAddress(publicKey: string, blockchain: string): string {
+  public generateAddress(publicKey: string, blockchain: string | Blockchain): string {
     const strategy = this.registry.getStrategy(blockchain);
     return strategy.generateAddress(publicKey);
   }
@@ -58,7 +59,7 @@ export class AddressDomainService {
   /**
    * Validate address format for specific blockchain
    */
-  public validateAddress(address: string, blockchain: string): boolean {
+  public validateAddress(address: string, blockchain: string | Blockchain): boolean {
     if (!address || typeof address !== 'string' || address.trim().length === 0) {
       return false;
     }
@@ -75,7 +76,7 @@ export class AddressDomainService {
   /**
    * Format address for display
    */
-  public formatAddress(address: string, blockchain: string): string {
+  public formatAddress(address: string, blockchain: string | Blockchain): string {
     const strategy = this.registry.getStrategy(blockchain);
     return strategy.formatAddress(address);
   }
@@ -83,9 +84,9 @@ export class AddressDomainService {
   /**
    * Get address format type for blockchain
    */
-  public getAddressFormat(blockchain: string): AddressFormat {
+  public getAddressFormat(blockchain: string | Blockchain): AddressFormat {
     const strategy = this.registry.getStrategy(blockchain);
-    return strategy.getFormat();
+    return strategy.blockchain.getAddressFormat();
   }
 
   /**
@@ -98,14 +99,14 @@ export class AddressDomainService {
   /**
    * Check if blockchain is supported
    */
-  public isSupported(blockchain: string): boolean {
+  public isSupported(blockchain: string | Blockchain): boolean {
     return this.registry.isSupported(blockchain);
   }
 
   /**
    * Get address length constraints for blockchain
    */
-  public getAddressLength(blockchain: string): { min: number; max: number } {
+  public getAddressLength(blockchain: string | Blockchain): { min: number; max: number } {
     const strategy = this.registry.getStrategy(blockchain);
     return strategy.getLength();
   }
@@ -113,7 +114,7 @@ export class AddressDomainService {
   /**
    * Get address prefix for blockchain
    */
-  public getAddressPrefix(blockchain: string): string {
+  public getAddressPrefix(blockchain: string | Blockchain): string {
     const strategy = this.registry.getStrategy(blockchain);
     return strategy.getPrefix();
   }
@@ -121,7 +122,7 @@ export class AddressDomainService {
   /**
    * Validate public key for specific blockchain
    */
-  public validatePublicKey(publicKey: string, blockchain: string): boolean {
+  public validatePublicKey(publicKey: string, blockchain: string | Blockchain): boolean {
     try {
       const strategy = this.registry.getStrategy(blockchain);
       return strategy.validatePublicKey(publicKey);
@@ -135,14 +136,15 @@ export class AddressDomainService {
    */
   public generateAddressInfo(
     publicKey: string, 
-    blockchain: string
+    blockchain: string | Blockchain
   ): AddressInfo {
+    const blockchainId = typeof blockchain === 'string' ? blockchain : blockchain.getId();
     const strategy = this.registry.getStrategy(blockchain);
     const address = strategy.generateAddress(publicKey);
-    const format = strategy.getFormat();
+    const format = strategy.blockchain.getAddressFormat();
 
     return {
-      blockchain,
+      blockchain: blockchainId,
       address,
       publicKey,
       format
@@ -184,15 +186,16 @@ export class AddressDomainService {
   /**
    * Get strategy information for debugging
    */
-  public getStrategyInfo(blockchain: string): string {
+  public getStrategyInfo(blockchain: string | Blockchain): string {
+    const blockchainId = typeof blockchain === 'string' ? blockchain : blockchain.getId();
     try {
       const strategy = this.registry.getStrategy(blockchain);
       if ('getInfo' in strategy && typeof (strategy as any).getInfo === 'function') {
         return (strategy as any).getInfo();
       }
-      return `${blockchain} strategy - no additional info available`;
+      return `${blockchainId} strategy - no additional info available`;
     } catch (error) {
-      return `No strategy found for blockchain: ${blockchain}`;
+      return `No strategy found for blockchain: ${blockchainId}`;
     }
   }
 

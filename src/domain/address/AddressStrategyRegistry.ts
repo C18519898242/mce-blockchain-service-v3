@@ -5,6 +5,7 @@
  */
 
 import { IAddressStrategy } from './interfaces/IAddressStrategy';
+import { Blockchain } from '../blockchain/Blockchain';
 
 export class AddressStrategyRegistry {
   private strategies = new Map<string, IAddressStrategy>();
@@ -13,46 +14,56 @@ export class AddressStrategyRegistry {
    * Register a new address strategy
    */
   public register(strategy: IAddressStrategy): void {
-    if (this.strategies.has(strategy.blockchain)) {
-      console.warn(`Strategy for blockchain ${strategy.blockchain} is already registered. Overwriting...`);
+    const blockchainId = strategy.blockchain.getId();
+    if (this.strategies.has(blockchainId)) {
+      console.warn(`Strategy for blockchain ${blockchainId} is already registered. Overwriting...`);
     }
     
-    this.strategies.set(strategy.blockchain, strategy);
-    console.info(`Registered address strategy for blockchain: ${strategy.blockchain}`);
+    this.strategies.set(blockchainId, strategy);
+    console.info(`Registered address strategy for blockchain: ${blockchainId}`);
   }
   
   /**
-   * Get strategy for specific blockchain
+   * Get strategy for specific blockchain by ID
    */
-  public getStrategy(blockchain: string): IAddressStrategy {
-    const strategy = this.strategies.get(blockchain);
+  public getStrategy(blockchain: string | Blockchain): IAddressStrategy {
+    if (!blockchain) {
+      throw new Error('Blockchain cannot be null or undefined');
+    }
+    const blockchainId = typeof blockchain === 'string' ? blockchain : blockchain.getId();
+    const strategy = this.strategies.get(blockchainId);
     
     if (!strategy) {
-      throw new Error(`No address strategy found for blockchain: ${blockchain}. Available: ${this.getSupportedBlockchains().join(', ')}`);
+      throw new Error(`No address strategy found for blockchain: ${blockchainId}. Available: ${this.getSupportedBlockchains().join(', ')}`);
     }
     
     return strategy;
   }
   
   /**
-   * Check if blockchain is supported
-   */
-  public isSupported(blockchain: string): boolean {
-    return this.strategies.has(blockchain);
-  }
+    * 检查指定的区块链是否支持
+    */
+   public isSupported(blockchain: string | Blockchain): boolean {
+     if (!blockchain) {
+       return false;
+     }
+     const blockchainId = typeof blockchain === 'string' ? blockchain : blockchain.getId();
+     return this.strategies.has(blockchainId);
+   }
   
   /**
-   * Get all supported blockchains
+   * Get all supported blockchain IDs
    */
   public getSupportedBlockchains(): string[] {
     return Array.from(this.strategies.keys());
   }
   
   /**
-   * Unregister a strategy (for testing or dynamic removal)
+   * Unregister a strategy by blockchain ID
    */
-  public unregister(blockchain: string): boolean {
-    return this.strategies.delete(blockchain);
+  public unregister(blockchain: string | Blockchain): boolean {
+    const blockchainId = typeof blockchain === 'string' ? blockchain : blockchain.getId();
+    return this.strategies.delete(blockchainId);
   }
   
   /**
@@ -75,12 +86,12 @@ export class AddressStrategyRegistry {
   public validateStrategy(strategy: IAddressStrategy): boolean {
     try {
       // Check required properties
-      if (!strategy.blockchain || typeof strategy.blockchain !== 'string') {
+      if (!strategy.blockchain || !(strategy.blockchain instanceof Blockchain)) {
         return false;
       }
       
       // Check required methods
-      const requiredMethods = ['generateAddress', 'validateAddress', 'formatAddress', 'getFormat', 'getLength', 'getPrefix', 'validatePublicKey'];
+      const requiredMethods = ['generateAddress', 'validateAddress', 'formatAddress', 'getLength', 'getPrefix', 'validatePublicKey'];
       
       for (const method of requiredMethods) {
         if (typeof (strategy as any)[method] !== 'function') {
@@ -99,7 +110,7 @@ export class AddressStrategyRegistry {
    */
   public registerWithValidation(strategy: IAddressStrategy): void {
     if (!this.validateStrategy(strategy)) {
-      throw new Error(`Invalid strategy implementation for blockchain: ${strategy.blockchain}`);
+      throw new Error(`Invalid strategy implementation for blockchain: ${strategy.blockchain.getId()}`);
     }
     
     this.register(strategy);

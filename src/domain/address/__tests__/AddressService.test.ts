@@ -8,7 +8,7 @@ import { AddressDomainService } from '../AddressService';
 import { 
   SolanaAddressStrategy
 } from '../index';
-import { BLOCKCHAINS } from '../../blockchain/blockchain.constants';
+import { SOLANA } from '../../blockchain/blockchain.constants';
 
 describe('AddressDomainService', () => {
   let addressService: AddressDomainService;
@@ -23,6 +23,8 @@ describe('AddressDomainService', () => {
       
       // Test that Solana strategy is registered
       expect(() => addressService.validateAddress('11111111111111111111111111111111112', 'SOLANA')).not.toThrow();
+      // Also test with Blockchain instance
+      expect(() => addressService.validateAddress('11111111111111111111111111111111112', SOLANA)).not.toThrow();
     });
   });
 
@@ -34,6 +36,7 @@ describe('AddressDomainService', () => {
       
       // Test that custom strategy works (using default SOLANA blockchain)
       expect(() => addressService.validateAddress('11111111111111111111111111111111112', 'SOLANA')).not.toThrow();
+      expect(() => addressService.validateAddress('11111111111111111111111111111111112', SOLANA)).not.toThrow();
     });
 
     it('should throw error for duplicate blockchain', () => {
@@ -45,7 +48,7 @@ describe('AddressDomainService', () => {
 
   describe('validateAddress', () => {
     describe('Solana addresses', () => {
-      it('should validate valid Solana addresses', () => {
+      it('should validate valid Solana addresses with string blockchain id', () => {
         const validAddresses = [
           '11111111111111111111111111111111112', // System Program
           '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM' // Random valid address
@@ -53,6 +56,17 @@ describe('AddressDomainService', () => {
 
         validAddresses.forEach(address => {
           expect(addressService.validateAddress(address, 'SOLANA')).toBe(true);
+        });
+      });
+      
+      it('should validate valid Solana addresses with Blockchain instance', () => {
+        const validAddresses = [
+          '11111111111111111111111111111111112', // System Program
+          '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM' // Random valid address
+        ];
+
+        validAddresses.forEach(address => {
+          expect(addressService.validateAddress(address, SOLANA)).toBe(true);
         });
       });
 
@@ -70,8 +84,8 @@ describe('AddressDomainService', () => {
         ];
 
         invalidAddresses.forEach((address, index) => {
-          const result = addressService.validateAddress(address, 'SOLANA');
-          expect(result).toBe(false);
+          expect(addressService.validateAddress(address, 'SOLANA')).toBe(false);
+          expect(addressService.validateAddress(address, SOLANA)).toBe(false);
         });
       });
     });
@@ -95,6 +109,7 @@ describe('AddressDomainService', () => {
   describe('isBlockchainSupported', () => {
     it('should return true for supported blockchains', () => {
       expect(addressService.isSupported('SOLANA')).toBe(true);
+      expect(addressService.isSupported(SOLANA)).toBe(true);
     });
 
     it('should return false for unsupported blockchains', () => {
@@ -123,15 +138,38 @@ describe('AddressDomainService', () => {
   });
 
   describe('Integration with blockchain constants', () => {
-    it('should work with Solana blockchain constants', () => {
-      const testAddresses = {
-        [BLOCKCHAINS.SOLANA]: '11111111111111111111111111111111112'
-      };
-
-      Object.entries(testAddresses).forEach(([blockchain, address]) => {
-        expect(addressService.validateAddress(address as string, blockchain)).toBe(true);
-        expect(addressService.isSupported(blockchain)).toBe(true);
-      });
+    it('should work with Solana blockchain instance', () => {
+      const address = '11111111111111111111111111111111112';
+      
+      expect(addressService.validateAddress(address, SOLANA)).toBe(true);
+      expect(addressService.isSupported(SOLANA)).toBe(true);
+      expect(addressService.getAddressFormat(SOLANA)).toBe(SOLANA.getAddressFormat());
+    });
+  });
+  
+  describe('getAddressFormat', () => {
+    it('should return the correct address format from blockchain instance', () => {
+      const format = addressService.getAddressFormat('SOLANA');
+      expect(format).toBeDefined();
+      
+      // Using Blockchain instance
+      const formatWithInstance = addressService.getAddressFormat(SOLANA);
+      expect(formatWithInstance).toBe(SOLANA.getAddressFormat());
+    });
+  });
+  
+  describe('generateAddressInfo', () => {
+    it('should generate address info with correct blockchain id', () => {
+      const publicKey = '1111111111111111111111111111111111111111111111111111111111111111';
+      
+      // With string id
+      const infoWithString = addressService.generateAddressInfo(publicKey, 'SOLANA');
+      expect(infoWithString.blockchain).toBe('SOLANA');
+      
+      // With Blockchain instance
+      const infoWithInstance = addressService.generateAddressInfo(publicKey, SOLANA);
+      expect(infoWithInstance.blockchain).toBe('SOLANA');
+      expect(infoWithInstance.format).toBe(SOLANA.getAddressFormat());
     });
   });
 });
